@@ -1,4 +1,4 @@
-"use client"; // Vì chúng ta dùng useState và useEffect
+"use client"; // Vì dùng useState và useEffect
 import { useState, useEffect } from 'react';
 
 export default function FashionPage() {
@@ -11,7 +11,7 @@ export default function FashionPage() {
       const response = await fetch('https://dummyjson.com/products/category/mens-shirts');
       const data = await response.json();
 
-      // Bước 3: Sử dụng Math.random() để chọn ngẫu nhiên 1 sản phẩm
+      // Sử dụng Math.random() để chọn ngẫu nhiên 1 sản phẩm
       const products = data.products;
       const randomIndex = Math.floor(Math.random() * products.length);
       setProduct(products[randomIndex]);
