@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Buổi 06 — Bài tập thực hành</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f4f6f8;
+    color: #111;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  .top-bar {
+    background: #0d1f2d;
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .top-bar .label { font-size: 11px; color: #5DCAA5; letter-spacing: 0.1em; font-weight: 500; }
+  .top-bar .title { font-size: 16px; font-weight: 500; color: #fff; margin-top: 3px; }
+
+  /* ── Layout ── */
+  .page { max-width: 900px; margin: 0 auto; padding: 32px 24px 48px; }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: #1D9E75;
+    margin-bottom: 12px;
+  }
+
+  /* ── Two columns ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: #fff;
+    border: 1px solid #e4e8ec;
+    border-radius: 10px;
+    padding: 20px;
+  }
+
+  /* ── Form elements ── */
+  .card h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: #0d1f2d;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  label {
+    display: block;
+    font-size: 11px;
+    color: #888;
+    margin-bottom: 4px;
+    margin-top: 10px;
+  }
+
+  input {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 13px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  input:focus { border-color: #1D9E75; }
+
+  .btn {
+    margin-top: 14px;
+    width: 100%;
+    padding: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    background: #1D9E75;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+
+  .btn:hover { background: #0F6E56; }
+  .btn:active { transform: scale(0.98); }
+
+  /* ── Result box ── */
+  .result-box {
+    margin-top: 12px;
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    line-height: 1.7;
+    min-height: 56px;
+    color: #999;
+    white-space: pre-wrap;
+    transition: all 0.2s;
+  }
+
+  .result-box.ok  { border-color: #b2ddd0; background: #eef6f2; color: #085041; }
+  .result-box.err { border-color: #f5c4b3; background: #faece7; color: #712B13; }
+
+  /* ── Console ── */
+  .console-section { margin-top: 20px; }
+
+  .console-header {
+    background: #0d1f2d;
+    border-radius: 8px 8px 0 0;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .console-header span { font-size: 11px; color: #5DCAA5; font-weight: 500; letter-spacing: 0.08em; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: #1D9E75; }
+
+  .console {
+    background: #0a1a28;
+    border-radius: 0 0 8px 8px;
+    padding: 12px 16px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #5DCAA5;
+    line-height: 1.8;
+    min-height: 60px;
+    max-height: 130px;
+    overflow-y: auto;
+  }
+
+  .console .dim { color: #3a6a7a; }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div>
+    <div class="label">BUỔI 06 — BÀI TẬP THỰC HÀNH</div>
+    <div class="title">Xây dựng server + form đăng ký người dùng</div>
+  </div>
+</div>
+
+<div class="page">
+  <p class="section-label" style="margin-bottom:16px;">Node.js + Express · Middleware · Routing · HTML + Fetch API</p>
+
+  <div class="two-col">
+
+    <!-- FORM 1: GET /api/info -->
+    <div class="card">
+      <h3>FORM 1 — KIỂM TRA THÔNG TIN</h3>
+
+      <label>Tên</label>
+      <input type="text" id="info-name" placeholder="Nhập tên..."/>
+
+      <label>Tuổi</label>
+      <input type="number" id="info-age" placeholder="Nhập tuổi..."/>
+
+      <button class="btn" id="btn-info">Gửi GET /api/info</button>
+
+      <div class="result-box" id="info-result">Kết quả sẽ hiện ở đây...</div>
+    </div>
+
+    <!-- FORM 2: POST /api/register -->
+    <div class="card">
+      <h3>FORM 2 — ĐĂNG KÝ NGƯỜI DÙNG</h3>
+
+      <label>Tên</label>
+      <input type="text" id="reg-name" placeholder="Nhập tên..."/>
+
+      <label>Tuổi</label>
+      <input type="number" id="reg-age" placeholder="Nhập tuổi..."/>
+
+      <label>Email</label>
+      <input type="email" id="reg-email" placeholder="Nhập email..."/>
+
+      <button class="btn" id="btn-register">Gửi POST /api/register</button>
+
+      <div class="result-box" id="reg-result">Kết quả sẽ hiện ở đây...</div>
+    </div>
+
+  </div>
+
+  <!-- Console log -->
+  <div class="console-section">
+    <div class="console-header">
+      <div class="dot"></div>
+      <span>CONSOLE LOG — Middleware logger</span>
+    </div>
+    <div class="console" id="console-log">
+      <span class="dim">// Log sẽ hiện ở đây khi bạn gửi request...</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  const logs = [];
+
+  function addLog(method, path) {
+    const time = new Date().toISOString();
+    logs.unshift(`[${time}] ${method} ${path}`);
+    if (logs.length > 6) logs.pop();
+    document.getElementById('console-log').innerHTML =
+      logs.map(l => `<div>${l}</div>`).join('');
+  }
+
+  function setResult(elId, data, isError) {
+    const el = document.getElementById(elId);
+    el.textContent = JSON.stringify(data, null, 2);
+    el.className = 'result-box ' + (isError ? 'err' : 'ok');
+  }
+
+  // FORM 1 — GET /api/info
+  document.getElementById('btn-info').addEventListener('click', async (e) => {
+    e.preventDefault();
+    const name = document.getElementById('info-name').value.trim();
+    const age  = document.getElementById('info-age').value.trim();
+
+    addLog('GET', `/api/info?name=${name}&age=${age}`);
+
+    try {
+      const res = await fetch(`/api/info?name=${encodeURIComponent(name)}&age=${encodeURIComponent(age)}`);
+      const data = await res.json();
+      setResult('info-result', data, !res.ok);
+    } catch (err) {
+      setResult('info-result', { error: 'Không kết nối được server' }, true);
+    }
+  });
+
+  // FORM 2 — POST /api/register
+  document.getElementById('btn-register').addEventListener('click', async (e) => {
+    e.preventDefault();
+    const name  = document.getElementById('reg-name').value.trim();
+    const age   = document.getElementById('reg-age').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+
+    addLog('POST', '/api/register');
+
+    try {
+      const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, age: Number(age), email })
+      });
+      const data = await res.json();
+      setResult('reg-result', data, !res.ok);
+    } catch (err) {
+      setResult('reg-result', { error: 'Không kết nối được server' }, true);
+    }
+  });
+</script>
+
+</body>
+</html>
