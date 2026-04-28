@@ -1,0 +1,235 @@
+openapi 3.0.0
+info
+  title Student API
+  version 1.0.0
+  description API quản lý sinh viên (Express + MongoDB)
+
+servers
+  - url httplocalhost3000api
+
+tags
+  - name Students
+    description API sinh viên
+
+components
+  schemas
+    Student
+      type object
+      required
+        - studentId
+        - name
+        - email
+        - major
+      properties
+        _id
+          type string
+          example 665f1a2b1234567890abcd12
+        studentId
+          type string
+          example SV001
+        name
+          type string
+          example Nguyen Van A
+        email
+          type string
+          example a@gmail.com
+        score
+          type number
+          minimum 0
+          maximum 100
+          example 85
+        major
+          type string
+          enum [IT, Business, Design, Marketing]
+          example IT
+        enrollmentDate
+          type string
+          format date-time
+          example 2026-04-27T100000Z
+        isActive
+          type boolean
+          example true
+        createdAt
+          type string
+          format date-time
+        updatedAt
+          type string
+          format date-time
+
+    ErrorResponse
+      type object
+      properties
+        message
+          type string
+          example Error message
+
+paths
+
+  students
+    post
+      tags [Students]
+      summary Tạo sinh viên
+      requestBody
+        required true
+        content
+          applicationjson
+            example
+              studentId SV001
+              name Nguyen Van A
+              email a@gmail.com
+              score 90
+              major IT
+      responses
+        201
+          description Tạo thành công
+          content
+            applicationjson
+              schema
+                $ref '#componentsschemasStudent'
+
+    get
+      tags [Students]
+      summary Lấy danh sách sinh viên
+      parameters
+        - in query
+          name page
+          schema
+            type integer
+            example 1
+        - in query
+          name limit
+          schema
+            type integer
+            example 10
+        - in query
+          name major
+          schema
+            type string
+            example IT
+      responses
+        200
+          description Danh sách sinh viên
+          content
+            applicationjson
+              example
+                - studentId SV001
+                  name Nguyen Van A
+                  score 85
+
+  students{id}
+    get
+      tags [Students]
+      summary Lấy sinh viên theo ID
+      parameters
+        - in path
+          name id
+          required true
+          schema
+            type string
+      responses
+        200
+          description Thành công
+          content
+            applicationjson
+              schema
+                $ref '#componentsschemasStudent'
+        404
+          description Không tìm thấy
+          content
+            applicationjson
+              schema
+                $ref '#componentsschemasErrorResponse'
+
+    put
+      tags [Students]
+      summary Cập nhật sinh viên
+      parameters
+        - in path
+          name id
+          required true
+          schema
+            type string
+      requestBody
+        content
+          applicationjson
+            example
+              name Nguyen Van B
+              score 95
+      responses
+        200
+          description Cập nhật thành công
+          content
+            applicationjson
+              schema
+                $ref '#componentsschemasStudent'
+
+    delete
+      tags [Students]
+      summary Xóa sinh viên
+      parameters
+        - in path
+          name id
+          required true
+      responses
+        204
+          description Xóa thành công
+        404
+          description Không tìm thấy
+
+  students{id}score
+    patch
+      tags [Students]
+      summary Cập nhật điểm sinh viên
+      parameters
+        - in path
+          name id
+          required true
+      requestBody
+        content
+          applicationjson
+            example
+              score 88
+      responses
+        200
+          description Cập nhật thành công
+          content
+            applicationjson
+              schema
+                $ref '#componentsschemasStudent'
+        400
+          description Điểm không hợp lệ
+          content
+            applicationjson
+              example
+                message Score invalid
+
+  studentstop
+    get
+      tags [Students]
+      summary Lấy top sinh viên
+      parameters
+        - in query
+          name limit
+          schema
+            type integer
+            example 5
+      responses
+        200
+          description Top sinh viên
+          content
+            applicationjson
+              example
+                - name Nguyen Van A
+                  score 98
+
+  studentsstatsavg
+    get
+      tags [Students]
+      summary Tính điểm trung bình
+      responses
+        200
+          description Điểm trung bình
+          content
+            applicationjson
+              example
+                - avg 82.5
